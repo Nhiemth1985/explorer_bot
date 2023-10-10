@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<launch>
+
+
+    <include file="$(find rplidar_ros)/launch/rplidar_a1.launch"/>
+    <arg name="map_file" default="$(find explorer_bot)/maps/map.yaml"/>
+    <arg name="base_frame" default="base_link"/>
+    <arg name="odom_frame" default="base_link"/>
+    <node pkg="tf" type="static_transform_publisher" name="base_to_laser_broadcaster" args="0 0 0 0 0 0 base_link laser 100"/>
+    
+    
+    <!-- Map server -->
+    <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+    
+    <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
+
+    
+
+    <!-- AMCL -->
+    <include file="$(find explorer_bot)/launch/amcl.launch"/>
+
+
+    
+
+
+    
+
+    <node pkg="move_base" type="move_base" name="Base_move" output="screen">
+        <param name="controller_frequency" value="10.0" />
+        <rosparam file="$(find explorer_bot)/config/costmap_common_params.yaml" command="load" ns="global_costmap"/>
+        <rosparam file="$(find explorer_bot)/config/costmap_common_params.yaml" command="load" ns="local_costmap"/>
+        <rosparam file="$(find explorer_bot)/config/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find explorer_bot)/config/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find explorer_bot)/config/trajectory_planner.yaml" command="load" />
+      </node>
+
+</launch>

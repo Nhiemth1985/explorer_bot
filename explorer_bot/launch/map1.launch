@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+    
+    
+    
+    <node name="Joint_tester" pkg="rviz" type="rviz" output="screen" args="-d $(find explorer_bot)/config/map.rviz"/>
+
+
+    <node pkg="gmapping" type="slam_gmapping" name="maping_node">
+        <param name="base_frame" value="base_link" />
+        <param name="odom_frame" value="odom" />
+        <param name="delta" value="0.1" />
+    </node>
+
+
+</launch>
